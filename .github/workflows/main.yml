@@ -4,9 +4,9 @@ on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
-    steps: 
-      - name: Automatic Versioning
-        uses: nicupavel/action-files-version-increment@v3
+    steps:             
+      - name: Semantic Releaser for All Languages            
+        uses: jossef/action-semantic-releaser@v1.0.1
             
 
             
