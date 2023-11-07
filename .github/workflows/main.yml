@@ -7,8 +7,6 @@ jobs:
     steps:
       - name: Auto Changelog        
         uses: ardalanamini/auto-changelog@v4.0.0
-      - name: LaTeX document compiler
-        uses: Sakul6499/GitHub-Action-LaTeX@v1.0.0
             
             
                     
