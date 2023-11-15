@@ -1,21 +1,29 @@
 \documentclass{article}
 
-\title{My LaTeX Document}
-\author{Your Name}
+\usepackage{changelog}
 
 \begin{document}
+
+\title{My Document}
+\author{Your Name}
+\date{\today}
 
 \maketitle
 
 \section{Introduction}
-This is a simple LaTeX document.
+This is the introduction section of your document.
 
-\subsection{Subsection}
-This is a subsection within the introduction.
+\section{Changelog}
 
-% Changelog section for versioning
 \begin{changelog}
-  \version{1.0.0}{Initial release}
+  \begin{release}{1.0.0}{\today}
+    \item Initial release.
+  \end{release}
+
+  \begin{release}{1.1.0}{\today}
+    \item Added a new feature.
+    \item Fixed a bug.
+  \end{release}
 \end{changelog}
 
 \end{document}
