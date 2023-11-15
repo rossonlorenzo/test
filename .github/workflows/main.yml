@@ -13,16 +13,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup LaTeX
+    - name: Setup TeXLive
       uses: xu-cheng/texlive-action@v2
       with:
-        texlive_version: latest
+        scheme: basic
+        texlive_version: 2021
 
     - name: Compile LaTeX files
-      run: |
-        for file in $(find . -name "*.tex"); do
-          pdflatex -interaction=nonstopmode -halt-on-error "$file"
-        done
+      uses: dante-ev/github-action-with-texlive@v1
+      with:
+        root_file: test.tex  # Update with your main LaTeX file
 
     - name: Set timestamp and version for builds of changed LaTeX files
       run: |
