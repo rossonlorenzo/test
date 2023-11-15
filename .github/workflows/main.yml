@@ -1,31 +1,27 @@
-name: Grammar Check
-
+name: Releases
 on:
   push:
-    paths:
-      - '**/*.pdf'
+    branches:
+      - main
 
 jobs:
-  grammar_check:
+  changelog:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Install Java
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'adopt'
-        java-version: '11'
-
-    - name: Install pdftotext
-      run: |
-        sudo apt-get update -q
-        sudo apt-get install -y poppler-utils
-
-    - name: Convert PDFs to text and run grammar check
-      run: |
-        for file in ${{ github.event.before }}..${{ github.sha }}/documentation/**/*.pdf; do
-          pdftotext "$file" - | java -jar /path/to/languagetool-commandline.jar --language it -
-        done
+      - uses: actions/checkout@v2
+      - name: conventional Changelog Action 
+        id: changelog 
+        uses: TriPSs/conventional-changelog-action@v3.7.1 
+        with:
+          github-token: ${{ secrets.CHANGELOG_RELEASE }}
+          
+      - name: create release
+        uses: actions/create-release@v1
+        if: S{{ steps.changelog.outputs.skipped == 'false' }} 
+        env:
+          GITHUB$TOKEN: S{f secrets. CHANGELOG_RELEASE }} 
+        with:
+          tag_name: S{{ steps.changelog.outputs.tag }} 
+          release_name: ${{ steps.changelog.outputs.tag }} 
+          body: St steps.changelog.outputs.clean_changelog }}
