@@ -13,15 +13,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Docker Login
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-
     - name: Setup LaTeX
       uses: xu-cheng/texlive-action@v2
       with:
         texlive_version: latest
-        scheme: basic
+        scheme: small
 
     - name: Compile LaTeX files
       run: |
