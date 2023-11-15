@@ -1,12 +1,51 @@
-name: test
-on: [push]
+name: Compile LaTeX to PDF
+
+on:
+  pull_request:
+    types:
+      - synchronize
+      - opened
+      - reopened
+      - closed
+
 jobs:
-  test-example:
+  compile_latex:
     runs-on: ubuntu-latest
+
+    inputs:
+      parameters:
+        combined_pdf_name:
+          description: 'Name for the combined PDF file'
+          default: 'combined_file'
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: antaljanosbenjamin/compile-latex@v1.0.0
-        with:
-          file: test.tex
-          args: -pdf
-      - run: '(test -f test.pdf && echo PDF exists) || (echo PDF does not exist && exit 1)'
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup LaTeX
+      uses: xu-cheng/texlive-action@v2
+      with:
+        scheme: basic
+        texlive_version: 2021
+
+    - name: Identify changed LaTeX files
+      id: identify
+      run: |
+        CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.tex$')
+        echo "Changed or new LaTeX files: $CHANGED_FILES"
+        echo "::set-output name=latex_files::$CHANGED_FILES"
+
+    - name: Compile LaTeX files
+      run: |
+        for file in ${{ steps.identify.outputs.latex_files }}; do
+          xelatex -interaction=nonstopmode -halt-on-error "$file"
+        done
+
+    - name: Combine PDF files
+      run: pdftk *.pdf cat output ${{ inputs.combined_pdf_name }}.pdf
+
+    - name: Upload combined PDF as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ inputs.combined_pdf_name }}-pdf
+        path: ${{ inputs.combined_pdf_name }}.pdf
