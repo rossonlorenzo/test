@@ -27,10 +27,4 @@ jobs:
 
     - name: Run grammar check on PDF files
       run: |
-        java -jar languagetool-commandline.jar --language it --grammarOnly documentation/*/.pdf
-
-
-            
-
-            
-                    
+        java -jar languagetool-commandline.jar --language it --grammarOnly documentation/**/*.pdf
