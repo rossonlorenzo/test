@@ -1,31 +1,31 @@
-name: Releases
+name: Compile LaTeX to PDF
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - '**/*.tex'  # Trigger only on changes to LaTeX files
 
 jobs:
-  changelog:
+  compile_latex:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
+    - name: Setup LaTeX
+      uses: xu-cheng/texlive-action@v2
+      with:
+        scheme: basic
+        package: xelatex
 
-      - name: conventional Changelog Action
-        id: changelog
-        uses: TriPSs/conventional-changelog-action@v3.7.1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Create release
-        uses: actions/create-release@v1
-        if: ${{ steps.changelog.outputs.skipped == 'false' }} 
-        env:
-          GITHUB_TOKEN: ${{ secrets.CHANGELOG_RELEASE }} 
-        with:
-          tag_name: ${{ steps.changelog.outputs.tag }} 
-          release_name: ${{ steps.changelog.outputs.tag }} 
-          body: ${{ steps.changelog.outputs.clean_changelog }}
+    - name: Compile LaTeX to PDF
+      run: |
+        latex_file=$(find . -name "*.tex" | head -n 1)
+        xelatex -interaction=nonstopmode -halt-on-error $latex_file
+
+    - name: Upload PDF as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: compiled-pdf
+        path: '*.pdf'
