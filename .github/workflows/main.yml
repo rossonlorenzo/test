@@ -1,31 +1,24 @@
-name: Compile LaTeX to PDF
-
-on:
-  push:
-    paths:
-      - '**/*.tex'  # Trigger only on changes to LaTeX files
+on: [push]
 
 jobs:
-  compile_latex:
+  latex-job:
     runs-on: ubuntu-latest
-
+    name: A job to Compile Latex file
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-    - name: Setup LaTeX
-      uses: xu-cheng/texlive-action@v2
-      with:
-        scheme: basic
-        texlive_version: 2021
-
-    - name: Compile LaTeX to PDF
+    - name: Identify changed LaTeX file
+      id: identify
       run: |
-        latex_file=$(find . -name "*.tex" | head -n 1)
-        xelatex -interaction=nonstopmode -halt-on-error $latex_file
+        # Identify the changed LaTeX file (assuming there's only one)
+        CHANGED_FILE=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.tex$' | head -n 1)
+        echo "Changed LaTeX file: $CHANGED_FILE"
+        echo "::set-output name=latex_file::$CHANGED_FILE"
 
-    - name: Upload PDF as artifact
-      uses: actions/upload-artifact@v2
+    - name: Compilation
+      uses: vinay0410/tectonic-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: compiled-pdf
-        path: '*.pdf'
+        tex_path: ${{ steps.identify.outputs.latex_file }}
+        push: 'yes'
