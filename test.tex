@@ -1,6 +1,5 @@
 \documentclass{article}
-
-\usepackage{changelog}
+\usepackage{githistory}
 
 \begin{document}
 
@@ -14,16 +13,6 @@
 This is the introduction section of your document.
 
 \section{Changelog}
-
-\begin{changelog}
-  \begin{release}{1.0.0}{\today}
-    \item Initial release.
-  \end{release}
-
-  \begin{release}{1.1.0}{\today}
-    \item Added a new feature.
-    \item Fixed a bug.
-  \end{release}
-\end{changelog}
+\printfilelog
 
 \end{document}
