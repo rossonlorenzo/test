@@ -1,43 +1,32 @@
-name: Compile LaTeX Document
+name: Build and Push LaTeX Document
 
 on:
   push:
     branches:
-      - main
+      - main  # Change this to your main branch
 
 jobs:
-  compile_latex:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Setup LaTeX
-      uses: xu-cheng/texlive-action@v2
-      with:
-        texlive_version: latest
-
-    - name: Compile LaTeX files
+    - name: Install TeX Live
       run: |
-        for file in $(find . -name "*.tex"); do
-          pdflatex -interaction=nonstopmode -halt-on-error "$file"
-        done
+        sudo apt-get install -y texlive
+        sudo apt-get install -y latexmk
 
-    - name: Set timestamp and version for builds of changed LaTeX files
+    - name: Build LaTeX document
       run: |
-        shopt -s globstar
-        for f in documents/**/*.tex; do
-          [[ ! -f "$f" ]] && continue
-          touch -amd "$(date -R -r "$f")" "${f%.tex}.pdf"
-          version=$(grep --context 1 "changelog:" "$f" | tail -n1 | cut -d ',' -f1 | sed 's/\s//g; s/"//g')
-          [[ "$version" != 'none' ]] && mv "${f%.tex}.pdf" "${f%.tex}_v${version}.pdf" && f="${f%.tex}_v${version}.tex"
-          git add "${f%.tex}.pdf"
-        done
+        pdflatex test.tex
+        # Add other necessary commands, like bibtex or makeindex if needed
 
     - name: Commit and push changes
       run: |
-        git config --local user.name "github-actions[bot]"
-        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git commit -m "Update PDFs [skip ci]"
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add test.pdf
+        git commit -m "Update PDF [skip ci]"
         git push
