@@ -5,20 +5,11 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to Compile Latex file
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Identify changed LaTeX file
-      id: identify
-      run: |
-        # Identify the changed LaTeX file (assuming there's only one)
-        CHANGED_FILE=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.tex$' | head -n 1)
-        echo "Changed LaTeX file: $CHANGED_FILE"
-        echo "::set-output name=latex_file::$CHANGED_FILE"
-
+    - uses: actions/checkout@v1
     - name: Compilation
       uses: vinay0410/tectonic-action@master
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tex_path: ${{ steps.identify.outputs.latex_file }}
+        tex_path: 'dir/file.tex'
         push: 'yes'
