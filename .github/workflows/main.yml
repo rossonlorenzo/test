@@ -22,7 +22,7 @@ jobs:
     - name: Compile LaTeX files
       run: |
         for file in $(find . -name "*.tex"); do
-          pdflatex -interaction=nonstopmode -halt-on-error "$file"
+          /usr/local/texlive/bin/x86_64-linux/pdflatex -interaction=nonstopmode -halt-on-error "$file"
         done
 
     - name: Set timestamp and version for builds of changed LaTeX files
