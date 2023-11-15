@@ -18,6 +18,9 @@ jobs:
       with:
         scheme: basic
         texlive_version: 2021
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        token: ${{ secrets.GHCR_PAT }}
 
     - name: Identify changed LaTeX files
       id: identify
