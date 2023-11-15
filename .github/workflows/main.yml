@@ -21,7 +21,6 @@ jobs:
     - name: Build LaTeX document
       run: |
         pdflatex test.tex
-        # Add other necessary commands, like bibtex or makeindex if needed
 
     - name: Commit and push changes
       run: |
@@ -29,4 +28,5 @@ jobs:
         git config --local user.name "GitHub Action"
         git add test.pdf
         git commit -m "Update PDF [skip ci]"
-        git push
+        git remote add origin_with_token https://github.com/${{ github.repository }}.git
+        git push origin_with_token HEAD:main
