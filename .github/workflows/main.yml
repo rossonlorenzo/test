@@ -24,9 +24,7 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add test.pdf
-        git commit -m "Update PDF [skip ci]"
-        git remote add origin_with_token https://github.com/${{ github.repository }}.git
-        git push origin_with_token HEAD:main
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git commit -m "Update PDFs [skip ci]"
+        git push
