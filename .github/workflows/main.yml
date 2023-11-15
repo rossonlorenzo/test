@@ -1,14 +1,18 @@
-on: [push, pull_request]
+name: Update latexdiff pdf
 
+on:
+  push:
+    # Add file paths here to trigger the workflow only when these files are modified (optional)
 jobs:
-  build_docs:
+  latexdiff-action:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Git repository
-        uses: actions/checkout@v3
-        
-      - name: Upload PDF files
-        uses: actions/upload-artifact@v3
+      - uses: actions/checkout@v2
+        # Required to fetch all the commits for all branches
         with:
-          name: documentazione
-          path: "**/*.pdf"
+          fetch-depth: 0
+
+      - name: latexdiff-action
+        uses: priyanshuone6/latexdiff-action@v1
+        with:
+          file-paths: test.tex
