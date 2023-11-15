@@ -16,13 +16,15 @@ jobs:
     - name: Setup TeXLive
       uses: xu-cheng/texlive-action@v2
       with:
-        scheme: basic
-        texlive_version: 2021
+        texlive_version: latest
+        run: |
+            apk add make
+            make
 
     - name: Compile LaTeX files
       uses: dante-ev/github-action-with-texlive@v1
       with:
-        root_file: test.tex  # Update with your main LaTeX file
+        root_file: main.tex  # Update with your main LaTeX file
 
     - name: Set timestamp and version for builds of changed LaTeX files
       run: |
