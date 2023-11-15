@@ -1,18 +1,15 @@
-name: Update latexdiff pdf
+on: [push]
 
-on:
-  push:
-    # Add file paths here to trigger the workflow only when these files are modified (optional)
 jobs:
-  latexdiff-action:
+  latex-job:
     runs-on: ubuntu-latest
+    name: A job to Compile Latex file
     steps:
-      - uses: actions/checkout@v2
-        # Required to fetch all the commits for all branches
-        with:
-          fetch-depth: 0
-
-      - name: latexdiff-action
-        uses: priyanshuone6/latexdiff-action@v1
-        with:
-          file-paths: test.tex
+    - uses: actions/checkout@v1
+    - name: Compilation
+      uses: vinay0410/tectonic-action@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tex_path: './test.tex'
+        push: 'yes'
