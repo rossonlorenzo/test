@@ -1,27 +1,12 @@
-name: Compile LaTeX to PDF
-
-on:
-  push:
-    paths:
-      - '**/*.tex'
-
+name: test
+on: [push]
 jobs:
-  compile_latex:
+  test-example:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Setup Docker
-      uses: actions/setup-docker@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GHCR_PAT }}
-
-    - name: Compile LaTeX files
-      run: |
-        for file in $(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.tex$'); do
-          docker run -v $PWD:/github/workspace -w /github/workspace ghcr.io/xu-cheng/texlive-basic:20220201 pdflatex -interaction=nonstopmode -halt-on-error "$file"
-        done
+      - uses: actions/checkout@v2
+      - uses: antaljanosbenjamin/compile-latex@v1.0.0
+        with:
+          file: test.tex
+          args: -pdf
+      - run: '(test -f test.pdf && echo PDF exists) || (echo PDF does not exist && exit 1)'
