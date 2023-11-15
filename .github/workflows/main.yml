@@ -24,7 +24,14 @@ jobs:
         wget https://languagetool.org/download/LanguageTool-5.5.zip
         unzip LanguageTool-5.5.zip
 
-    - name: Run grammar check on PDF files
+    - name: Install pdftotext
+      run: |
+        sudo apt-get update -q
+        sudo apt-get install -y poppler-utils
+
+    - name: Convert PDFs to text and run grammar check
       run: |
         cd LanguageTool-5.5
-        java -jar languagetool-commandline.jar --language it --grammarOnly ../documentation/**/*.pdf
+        for file in ../documentation/**/*.pdf; do
+          pdftotext "$file" - | java -jar languagetool-commandline.jar --language it --grammarOnly -
+        done
