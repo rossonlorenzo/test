@@ -13,11 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: conventional Changelog Action 
-        id: changelog 
-        uses: TriPSs/conventional-changelog-action@v3.7.1 
+
+      - name: conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v3.7.1
         with:
-          github-token: ${{ secrets.CHANGELOG_RELEASE }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Create release
         uses: actions/create-release@v1
