@@ -23,8 +23,8 @@ jobs:
       run: |
         wget https://languagetool.org/download/LanguageTool-5.5.zip
         unzip LanguageTool-5.5.zip
-        cd LanguageTool-5.5
 
     - name: Run grammar check on PDF files
       run: |
-        java -jar languagetool-commandline.jar --language it --grammarOnly documentation/**/*.pdf
+        cd LanguageTool-5.5
+        java -jar languagetool-commandline.jar --language it --grammarOnly ../documentation/**/*.pdf
