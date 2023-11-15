@@ -18,6 +18,7 @@ jobs:
       with:
         texlive_version: 2021
         scheme: full
+        pdflatex: true
 
     - name: Compile LaTeX files
       run: |
