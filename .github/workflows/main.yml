@@ -17,9 +17,6 @@ jobs:
       uses: xu-cheng/texlive-action@v2
       with:
         texlive_version: latest
-        run: |
-            apk add make
-            make
 
     - name: Compile LaTeX files
       run: |
