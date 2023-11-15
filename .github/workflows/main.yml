@@ -2,8 +2,8 @@ name: Grammar Check
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - '**/*.pdf'
 
 jobs:
   grammar_check:
@@ -19,11 +19,6 @@ jobs:
         distribution: 'adopt'
         java-version: '11'
 
-    - name: Download and install LanguageTool
-      run: |
-        wget https://languagetool.org/download/LanguageTool-5.5.zip
-        unzip LanguageTool-5.5.zip
-
     - name: Install pdftotext
       run: |
         sudo apt-get update -q
@@ -31,7 +26,6 @@ jobs:
 
     - name: Convert PDFs to text and run grammar check
       run: |
-        cd LanguageTool-5.5
-        for file in ../documentation/**/*.pdf; do
-          pdftotext "$file" - | java -jar languagetool-commandline.jar --language it --grammarOnly -
+        for file in ${{ github.event.before }}..${{ github.sha }}/documentation/**/*.pdf; do
+          pdftotext "$file" - | java -jar /path/to/languagetool-commandline.jar --language it -
         done
