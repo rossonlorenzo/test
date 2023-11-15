@@ -16,7 +16,7 @@ jobs:
     - name: Setup LaTeX
       uses: xu-cheng/texlive-action@v2
       with:
-        scheme: basic
+        scheme: full
         texlive_version: latest
 
     - name: Compile LaTeX files
