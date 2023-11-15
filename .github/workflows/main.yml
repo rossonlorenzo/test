@@ -1,13 +1,12 @@
-name: test
+name: Build LaTeX document
 on: [push]
 jobs:
-  test-example:
+  build_latex:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: antaljanosbenjamin/compile-latex@v1.0.0
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+      - name: Compile LaTeX document
+        uses: dante-ev/latex-action@latest
         with:
-          file: test.tex
-          output-directory: .
-          args: -pdf
-      - run: '(test -f test.pdf && echo PDF exists) || (echo PDF does not exist && exit 1)'
+          root_file: test.tex
