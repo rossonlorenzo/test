@@ -13,11 +13,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup LaTeX
+    - name: Set up TeX Live
       uses: xu-cheng/texlive-action@v2
       with:
-        texlive_version: latest
-        scheme: small
+        texlive_version: 2021
+        scheme: full
 
     - name: Compile LaTeX files
       run: |
