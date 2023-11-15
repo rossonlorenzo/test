@@ -1,22 +1,13 @@
 name: Compile LaTeX to PDF
 
 on:
-  pull_request:
-    types:
-      - synchronize
-      - opened
-      - reopened
-      - closed
+  push:
+    paths:
+      - '**/*.tex'
 
 jobs:
   compile_latex:
     runs-on: ubuntu-latest
-
-    inputs:
-      parameters:
-        combined_pdf_name:
-          description: 'Name for the combined PDF file'
-          default: 'combined_file'
 
     steps:
     - name: Checkout code
@@ -38,14 +29,5 @@ jobs:
     - name: Compile LaTeX files
       run: |
         for file in ${{ steps.identify.outputs.latex_files }}; do
-          xelatex -interaction=nonstopmode -halt-on-error "$file"
+          pdflatex -interaction=nonstopmode -halt-on-error "$file"
         done
-
-    - name: Combine PDF files
-      run: pdftk *.pdf cat output ${{ inputs.combined_pdf_name }}.pdf
-
-    - name: Upload combined PDF as artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{ inputs.combined_pdf_name }}-pdf
-        path: ${{ inputs.combined_pdf_name }}.pdf
