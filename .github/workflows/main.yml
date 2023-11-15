@@ -17,7 +17,7 @@ jobs:
       uses: xu-cheng/texlive-action@v2
       with:
         scheme: basic
-        texlive_version: 2021
+        texlive_version: latest
 
     - name: Compile LaTeX files
       run: |
