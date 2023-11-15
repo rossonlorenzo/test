@@ -1,4 +1,4 @@
-name: Compile LaTeX Documents
+name: Compile LaTeX Document
 
 on:
   push:
@@ -13,17 +13,22 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Compile LaTeX files
-      uses: xu-cheng/latex-action@v2
+    - name: Setup LaTeX
+      uses: xu-cheng/texlive-action@v2
       with:
-        root_file: test.tex  # Change this to the main LaTeX file in your project
-        args: -shell-escape  # Add any additional LaTeX build options here
+        texlive_version: latest
+
+    - name: Compile LaTeX files
+      run: |
+        for file in $(find . -name "*.tex"); do
+          pdflatex -interaction=nonstopmode -halt-on-error "$file"
+        done
 
     - name: Set timestamp and version for builds of changed LaTeX files
       run: |
         shopt -s globstar
         for f in documents/**/*.tex; do
-          [[ ! -f "$f" ]] && continue # skip if nothing to build
+          [[ ! -f "$f" ]] && continue
           touch -amd "$(date -R -r "$f")" "${f%.tex}.pdf"
           version=$(grep --context 1 "changelog:" "$f" | tail -n1 | cut -d ',' -f1 | sed 's/\s//g; s/"//g')
           [[ "$version" != 'none' ]] && mv "${f%.tex}.pdf" "${f%.tex}_v${version}.pdf" && f="${f%.tex}_v${version}.tex"
