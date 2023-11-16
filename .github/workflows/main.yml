@@ -9,14 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      NEW_VERSION: ${{ github.event.inputs.version }}
-      NEW_DATE: ${{ github.event.inputs.date }}
-      NEW_DESCRIPTION: ${{ github.event.inputs.description }}
-      NEW_ROLE: ${{ github.event.inputs.role }}
-      NEW_LAST_NAME: ${{ github.event.inputs.lastName }}
-      NEW_FIRST_NAME: ${{ github.event.inputs.firstName }}
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -26,15 +18,26 @@ jobs:
         sudo apt-get install -y texlive
         sudo apt-get install -y latexmk
 
-    - name: Build LaTeX document
+    - name: Move master to runner.temp
       run: |
-        # Your LaTeX build command, e.g., latexmk -pdf main.tex
-        latexmk -pdf main.tex
+        mv master "${RUNNER_TEMP}"
 
-    - name: Add new row to LaTeX document
+    - name: Set timestamp and version for LaTeX builds of changed files and replace the old ones in the local copy of `master`
       run: |
-        echo "\\\\hline" >> main.tex
-        echo "${NEW_VERSION} & ${NEW_DATE} & ${NEW_DESCRIPTION} & ${NEW_ROLE} & ${NEW_LAST_NAME} & ${NEW_FIRST_NAME} \\\\hline" >> main.tex
+        shopt -s globstar
+        for f in documents/**/*.tex; do
+          [[ ! -f "$f" ]] && continue # skip if nothing to build
+          rm -f "${RUNNER_TEMP}/master/${f%.tex}"*
+
+          # Extract version from the LaTeX file
+          version=$(grep "Versione" "$f" | awk '{print $2}' | sed 's/\\hline//g; s/ //g; s/&//g')
+
+          # Generate PDF with the updated timestamp and version
+          pdflatex -output-directory="${RUNNER_TEMP}/master" "$f"
+
+          [[ "$version" != 'none' ]] && mv "${f%.tex}.pdf" "${f%.tex}_v${version}.pdf" && f="${f%.tex}_v${version}.tex"
+          rsync -aR "${f%.tex}.pdf" "${RUNNER_TEMP}/master"
+        done
 
     - name: Set up Git
       run: |
@@ -43,6 +46,6 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git add main.tex
-        git commit -m "Update table with a new row [skip ci]"
+        git add documents/**/*.pdf
+        git commit -m "Update PDFs with a new row [skip ci]"
         git push origin HEAD:main
