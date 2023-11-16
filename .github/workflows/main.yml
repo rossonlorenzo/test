@@ -1,4 +1,4 @@
-name: Build and Push LaTeX Documents
+name: Build and Push LaTeX Document
 
 on:
   push:
@@ -18,15 +18,9 @@ jobs:
         sudo apt-get install -y texlive
         sudo apt-get install -y latexmk
 
-    - name: Build LaTeX documents
+    - name: Build LaTeX document
       run: |
-        for tex_file in $(find . -name '*.tex'); do
-          pdflatex "$tex_file"
-        done
-
-    - name: Merge PDFs into one file
-      run: |
-        gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=all_documents.pdf $(find . -name '*.pdf')
+        latexmk -pdf main.tex
 
     - name: Set up Git
       run: |
@@ -35,6 +29,6 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git add all_documents.pdf
-        git commit -m "Update merged PDF [skip ci]"
+        git add main.pdf
+        git commit -m "Update main PDF [skip ci]"
         git push origin HEAD:main
