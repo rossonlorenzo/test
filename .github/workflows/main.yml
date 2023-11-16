@@ -9,6 +9,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      NEW_VERSION: ${{ github.event.inputs.version }}
+      NEW_DATE: ${{ github.event.inputs.date }}
+      NEW_DESCRIPTION: ${{ github.event.inputs.description }}
+      NEW_ROLE: ${{ github.event.inputs.role }}
+      NEW_LAST_NAME: ${{ github.event.inputs.lastName }}
+      NEW_FIRST_NAME: ${{ github.event.inputs.firstName }}
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -20,15 +28,21 @@ jobs:
 
     - name: Build LaTeX document
       run: |
+        # Your LaTeX build command, e.g., latexmk -pdf main.tex
         latexmk -pdf main.tex
+
+    - name: Add new row to LaTeX document
+      run: |
+        echo "\\\\hline" >> main.tex
+        echo "${NEW_VERSION} & ${NEW_DATE} & ${NEW_DESCRIPTION} & ${NEW_ROLE} & ${NEW_LAST_NAME} & ${NEW_FIRST_NAME} \\\\hline" >> main.tex
 
     - name: Set up Git
       run: |
-        git config --global user.email "action@github.com"
-        git config --global user.name "GitHub Action"
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
 
     - name: Commit and push changes
       run: |
-        git add main.pdf
-        git commit -m "Update main PDF [skip ci]"
+        git add main.tex
+        git commit -m "Update table with a new row [skip ci]"
         git push origin HEAD:main
