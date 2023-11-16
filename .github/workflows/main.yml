@@ -1,9 +1,9 @@
-name: Build and Push LaTeX Document
+name: Build and Push LaTeX Documents
 
 on:
   push:
-    branches:
-      - main  # Change this to your main branch
+    paths:
+      - '**/*.tex'  # Trigger on any .tex file push
 
 jobs:
   build:
@@ -18,14 +18,23 @@ jobs:
         sudo apt-get install -y texlive
         sudo apt-get install -y latexmk
 
-    - name: Build LaTeX document
+    - name: Build LaTeX documents
       run: |
-        pdflatex test.tex
+        for tex_file in $(find . -name '*.tex'); do
+          pdflatex "$tex_file"
+        done
+
+    - name: Merge PDFs into one file
+      run: |
+        gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=all_documents.pdf $(find . -name '*.pdf')
+
+    - name: Set up Git
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
 
     - name: Commit and push changes
       run: |
-        git config --local user.name "Your GitHub Username"
-        git config --local user.email "your-email@example.com"
-        git add test.pdf
-        git commit -m "Update PDFs [skip ci]"
+        git add all_documents.pdf
+        git commit -m "Update merged PDF [skip ci]"
         git push origin HEAD:main
