@@ -20,7 +20,7 @@ jobs:
 
     - name: Move master to runner.temp
       run: |
-        mv master "${RUNNER_TEMP}"
+        mv main "${RUNNER_TEMP}"
 
     - name: Set timestamp and version for LaTeX builds of changed files and replace the old ones in the local copy of `master`
       run: |
