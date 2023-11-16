@@ -1,3 +1,10 @@
+\documentclass{article}
+\usepackage{float}  % To use the 'H' specifier for table placement
+
+\begin{document}
+
+\section{Meeting Minutes}
+
 \subsection{Introduction}
 
 This is the introduction section.
@@ -6,18 +13,21 @@ This is the introduction section.
 
 \begin{table}[H]
 \centering
+\caption{Version History of the Document}
 \label{tab:scrittori-redattori}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
-\textbf {Versione} & \textbf{Data} & \textbf{Descrizione} & \textbf{Ruolo} & \textbf{Cognome} & \textbf{Nome} \\
+\textbf{Version} & \textbf{Date} & \textbf{Description} & \textbf{Role} & \textbf{Last Name} & \textbf{First Name} \\
 \hline
-2.0.0 &  & Firma dell'azienda & Referente &  &  \\
+2.0.0 & & Firma dell'azienda & Referent & & \\
 \hline
-1.0.0 & 10/11/2023 & Stesura e revisione del verbale & Scrittori & Baggio & Matteo \\
+1.0.0 & 10/11/2023 & Stesura e revisione del verbale & Writers & Baggio & Matteo \\
 & & & & Rosson & Lorenzo \\
 \hline
-& & & Redattori &  &  \\
-& & & &  &  \\
+& & & Editors & & \\
+& & & & & \\
 \hline
 \end{tabular}
 \end{table}
+
+\end{document}
