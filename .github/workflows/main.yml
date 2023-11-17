@@ -12,9 +12,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Typst documents
-        uses: lvignoli/typst-action@main
+        uses: yusancky/setup-typst@v2
+        id: setup-typst
         with:
-          input_files: 'docs/**/*.typ'
+          version: 'v0.5.0'
+      - run: typst compile docs/**/*.typ
 
       - name: Commit and push PDF files to main
         run: |
