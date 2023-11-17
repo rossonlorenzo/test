@@ -16,12 +16,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: checkout the builds repo
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          path: main
-          token: ${{secrets.GIT_T}} # yeah i know this is a _bad_ workaround
       - name: move main to runner.temp
         run: |
           mv main "${RUNNER_TEMP}"
