@@ -1,1 +1,36 @@
+name: Build Typst document
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
 
+jobs:
+  build_typst:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build Typst documents
+        uses: yusancky/setup-typst@v2
+        id: setup-typst
+        with:
+          version: 'v0.5.0'
+      - run: typst compile docs/**/*.typ
+
+      - name: Commit and push PDF files to main
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Check if there are changes in PDF files
+          if [[ -n $(git diff --name-only) ]]; then
+            git checkout -b update-pdf-files
+            git add 'docs/**/*.pdf'
+            git commit -m "Update PDF files [skip ci]"
+            git push origin main
+          else
+            echo "No changes in PDF files. Skipping the merge."
+          fi
