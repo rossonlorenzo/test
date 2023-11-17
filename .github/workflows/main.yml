@@ -16,13 +16,19 @@ jobs:
       - name: Build Typst documents
         uses: Jarivanbakel/typst-action@v3
         with:
-          input_files: '*.typ'
+          input_files: '**/*.typ'
 
       - name: Commit and push PDF files to main
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b update-pdf-files
-          git add '*.pdf'
-          git commit -m "Update PDF files [skip ci]"
-          git push origin main
+
+          # Check if there are changes in PDF files
+          if [[ -n $(git diff --name-only) ]]; then
+            git checkout -b update-pdf-files
+            git add '**/*.pdf'
+            git commit -m "Update PDF files [skip ci]"
+            git push origin main
+          else
+            echo "No changes in PDF files. Skipping the merge."
+          fi
