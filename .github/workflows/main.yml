@@ -1,51 +1,31 @@
-name: Build and Push LaTeX Document
-
+name: Build Typst document
 on:
   push:
-    paths:
-      - '**/*.tex'  # Trigger on any .tex file push
+    branches:
+      - main
 
 jobs:
-  build:
+  build_typst:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Install TeX Live
-      run: |
-        sudo apt-get install -y texlive
-        sudo apt-get install -y latexmk
+      - name: Build Typst Document
+        run: |
+          for file in $(find . -name "*.typ"); do
+            # Build Typst document
+            docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm Jarivanbakel/typst-action:v3 typst compile --root . $file
 
-    - name: Move master to runner.temp
-      run: |
-        mv main "${RUNNER_TEMP}"
+            # Move the PDF output with the same name
+            mv "$(basename "$file" .typ).pdf" "${{ github.workspace }}/output/$(basename "$file" .typ).pdf"
+          done
 
-    - name: Set timestamp and version for LaTeX builds of changed files and replace the old ones in the local copy of `master`
-      run: |
-        shopt -s globstar
-        for f in documents/**/*.tex; do
-          [[ ! -f "$f" ]] && continue # skip if nothing to build
-          rm -f "${RUNNER_TEMP}/master/${f%.tex}"*
-
-          # Extract version from the LaTeX file
-          version=$(grep "Versione" "$f" | awk '{print $2}' | sed 's/\\hline//g; s/ //g; s/&//g')
-
-          # Generate PDF with the updated timestamp and version
-          pdflatex -output-directory="${RUNNER_TEMP}/master" "$f"
-
-          [[ "$version" != 'none' ]] && mv "${f%.tex}.pdf" "${f%.tex}_v${version}.pdf" && f="${f%.tex}_v${version}.tex"
-          rsync -aR "${f%.tex}.pdf" "${RUNNER_TEMP}/master"
-        done
-
-    - name: Set up Git
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-
-    - name: Commit and push changes
-      run: |
-        git add documents/**/*.pdf
-        git commit -m "Update PDFs with a new row [skip ci]"
-        git push origin HEAD:main
+      - name: Commit and Push PDF files
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Update PDF files [skip ci]"
+          git push
