@@ -15,4 +15,4 @@
 = Introduzione
 
 == Scopo del documento
-Ciao a tutti
+Ciao a tutti, sono io: MARIO.
