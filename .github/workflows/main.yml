@@ -15,6 +15,10 @@ jobs:
         run: |
             ls -R
 
+      - name: Debug Directory Contents
+        run: |
+            ls -R
+
       - name: Build Typst documents
         uses: Jarivanbakel/typst-action@v3
         with:
