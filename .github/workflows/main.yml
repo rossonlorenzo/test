@@ -23,7 +23,6 @@ jobs:
 
           # Check if there are changes in PDF files
           if [[ -n $(git diff --name-only) ]]; then
-            git checkout -b update-pdf-files
             git add 'docs/**/*.pdf'
             git commit -m "Update PDF files [skip ci]"
             git push origin main
