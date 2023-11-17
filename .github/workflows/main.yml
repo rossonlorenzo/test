@@ -18,7 +18,7 @@ jobs:
       - name: Build Typst documents
         uses: Jarivanbakel/typst-action@v3
         with:
-          input_files: 'docs/rtb/norme_di_progetto.typ'
+          input_files: 'docs/**/*.typ'
 
       - name: Commit and push PDF files to main
         run: |
