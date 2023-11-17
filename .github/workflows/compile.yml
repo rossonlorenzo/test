@@ -23,12 +23,14 @@ jobs:
       
       - name: Remove PDF files on main
         run: |
+          git checkout main
           git rm -r --cached 'docs/**/*.pdf'
           git commit -m "Remove existing PDF files [skip ci]" || true
           git push origin
 
       - name: Build Typst documents
         run: |
+          git chekout docs 
           docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find docs -type f -name "*\.typ" -exec typst compile --root . {} \;
       
       - name: Commit and push PDF files to main
