@@ -3,6 +3,8 @@ on:
   pull_request:
     types:
       - closed
+    branches:
+      - docs
 
 jobs:
   build_typst:
@@ -10,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          ref: docs
 
       - name: Debug Directory Contents
         run: |
