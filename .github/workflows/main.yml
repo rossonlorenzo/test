@@ -10,6 +10,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      
+      - name: Debug Directory Contents
+        run: |
+            ls -R
 
       - name: Build Typst documents
         uses: Jarivanbakel/typst-action@v3
