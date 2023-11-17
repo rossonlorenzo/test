@@ -1,3 +1,4 @@
+User
 name: Build Typst document
 
 on:
@@ -21,6 +22,14 @@ jobs:
         run: |
           ls -R
       
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+        with:
+          separator: ","
+          files: |
+            docs/**/*.typ
+          
       - name: Build Typst documents
         run: |
           docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find docs -type f -name "*\.typ" -exec typst compile --root . {} \;
@@ -32,10 +41,4 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add 'docs/**/*.pdf'
           git commit -m "Update PDF files [skip ci]"
-          git push origin
-
-      - name: Remove .typ files on main
-        run: |
-          git rm -r --cached 'docs/**/*.typ'
-          git commit -m "Remove existing .typ files [skip ci]" || true
           git push origin
