@@ -1,4 +1,4 @@
-#import "//../../template/big_docs.typ": *
+#import "/home/runner/work/test/test/template/big_docs.typ": *
 
 #show: project.with(
   title: "Norme di progetto",
