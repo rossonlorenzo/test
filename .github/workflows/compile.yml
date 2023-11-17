@@ -25,6 +25,7 @@ jobs:
         uses: Jarivanbakel/typst-action@v3
         with:
           input_files: 'docs/**/*.typ'
+          root: 'docs' # Set the root to the 'docs' directory
 
       - name: Commit and push PDF files to main
         run: |
