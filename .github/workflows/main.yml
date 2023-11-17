@@ -3,8 +3,6 @@ on:
   pull_request:
     types:
       - closed
-    branches:
-      - main
 
 jobs:
   build_typst:
@@ -12,24 +10,23 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-       
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v40
-        with:
-          separator: ","
-          files: |
-            docs/**/*.typ
 
-      - name: typst compile
-        run:  |
-          docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find documents -type f -name "*\.typ" -exec typst compile --root . {} \;
+      - name: Build Typst documents
+        uses: Jarivanbakel/typst-action@v3
+        with:
+          input_files: '**/docs/**/*.typ'
 
       - name: Commit and push PDF files to main
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b update-pdf-files
-          git add 'docs/**/*.pdf'
-          git commit -m "Update PDF files [skip ci]"
-          git push origin main
+
+          # Check if there are changes in PDF files
+          if [[ -n $(git diff --name-only) ]]; then
+            git checkout -b update-pdf-files
+            git add '**/docs/**/*.pdf'
+            git commit -m "Update PDF files [skip ci]"
+            git push origin update-pdf-files
+          else
+            echo "No changes in PDF files. Skipping the merge."
+          fi
