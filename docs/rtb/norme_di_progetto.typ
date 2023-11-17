@@ -15,4 +15,4 @@
 = Introduzione
 
 == Scopo del documento
-Pippo Baudo.
+Pippo Baudo
