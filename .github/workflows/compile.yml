@@ -20,7 +20,23 @@ jobs:
       - name: Debug Directory Contents
         run: |
           ls -R
-
+      
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+        with:
+          separator: ","
+          files: |
+            docs/**/*.typ
+            
+      - name: Delete ignored and unchanged typst documents
+        run: |
+          # shopt -s globstar
+          # ls docs/**/*.typ > .all
+          # echo ${{ steps.changed-files.outputs.all_changed_files }} | tr "," "\n" > .changed
+          # comm -23 .all .changed >> .typstignore
+          while IFS= read -r f; do rm -rf "${f}"; done < .typstignore
+          
       - name: Build Typst documents
         run: |
           docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find docs -type f -name "*\.typ" -exec typst compile --root . {} \;
@@ -29,6 +45,6 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add 'docs/**/*.pdf'
+          git add -A
           git commit -m "Update PDF files [skip ci]"
           git push origin main
