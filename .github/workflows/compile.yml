@@ -23,7 +23,7 @@ jobs:
 
       - name: Build Typst documents
         run: |
-          docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}/docs:/root --rm ghcr.io/typst/typst:latest find . -type f -name "*\.typ" -exec typst compile --root /root {} \;
+           docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find documents -type f -name "*\.typ" -exec typst compile --root . {} \;
 
       - name: Commit and push PDF files to main
         run: |
