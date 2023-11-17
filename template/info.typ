@@ -5,8 +5,8 @@
   name: "Farmacode",
   mail: "farmacode.swe.unipd@gmail.com",
   repo: "https://github.com/farmacodeunipd/farmacode",
-  group-logo: "./imgs/logo.png",
-  uni-logo: "./imgs/unipd.png",
+  group-logo: "../imgs/logo.png",
+  uni-logo: "../imgs/unipd.png",
 )
 
 #let p = (
