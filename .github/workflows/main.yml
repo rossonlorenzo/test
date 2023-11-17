@@ -18,9 +18,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: move main to runner.temp
-        run: |
-          mv main "${RUNNER_TEMP}"
       - name: restore timestamps
         uses: chetan/git-restore-mtime-action@v2
       - name: Get changed files
@@ -40,20 +37,17 @@ jobs:
       - name: typst compile
         run:  |
           docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find documents -type f -name "*\.typ" -exec typst compile --root . {} \;
-      - name: set timestamp and version for builds of changed files and replace the old ones in the local copy of `main`
+      - name: set timestamp and version for builds of changed files
         run: |
           shopt -s globstar
           for f in *.typ; do
             [[ ! -f "$f" ]] && continue # skip if nothing to build
-            rm -f "${RUNNER_TEMP}/main/${f%.typ}"*
             touch -amd "$( date -R -r "$f" )" "${f%.typ}.pdf"
             version=$(grep --context 1 "changelog:" "$f" | tail -n1 | cut -d ',' -f1 | sed 's/\s//g; s/"//g')
             [[ "$version" != 'none' ]] && mv "${f%.typ}.pdf" "${f%.typ}_v${version}.pdf" && f="${f%.typ}_v${version}.typ"
-            rsync -aR "${f%.typ}.pdf" "${RUNNER_TEMP}/main"
           done
       - name: push to builds repo
         run: |
-          pushd "${RUNNER_TEMP}/main"
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
