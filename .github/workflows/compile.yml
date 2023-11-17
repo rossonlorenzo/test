@@ -21,13 +21,6 @@ jobs:
         run: |
           ls -R
       
-      - name: Remove PDF files on main
-        run: |
-          git checkout main
-          git rm -r --cached 'docs/**/*.pdf'
-          git commit -m "Remove existing PDF files [skip ci]" || true
-          git push origin
-
       - name: Build Typst documents
         run: |
           git chekout docs 
