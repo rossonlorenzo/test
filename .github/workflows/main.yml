@@ -25,4 +25,4 @@ jobs:
           git checkout -b update-pdf-files
           git add '*.pdf'
           git commit -m "Update PDF files [skip ci]"
-          git push origin update-pdf-files
+          git push origin main
