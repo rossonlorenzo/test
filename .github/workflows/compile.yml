@@ -38,8 +38,10 @@ jobs:
       
           git push origin sources
       
-          # Debug: Display changes after push
-          git status
+          # Ensure the commit is pushed before proceeding
+          git fetch origin sources
+          git branch -r
+          git log -n 1 origin/sources
       
           git checkout -b documents
       
@@ -52,6 +54,20 @@ jobs:
           git status
       
           git add docs/**/*.pdf
+      
+          # Debug: Display changes after add
+          git status
+      
+          git commit -m "Update PDF files [skip ci]"
+      
+          # Debug: Display changes after the second commit
+          git status
+      
+          git push origin documents
+      
+          # Debug: Display changes after push to documents
+          git status
+
       
           # Debug: Display changes after add
           git status
