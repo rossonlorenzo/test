@@ -29,14 +29,11 @@ jobs:
           mkdir -p pdf-files
           cp -r docs/**/*.pdf pdf-files/
 
-      - name: Commit and push PDF files to documents branch
+      - name: Commit and force-push PDF files to documents branch
         run: |
           git checkout -b documents || true
           git add pdf-files/
           git commit -m "Update PDF files [skip ci]"
 
-          # Fetch the changes from the remote "documents" branch
-          git fetch origin documents
-
-          # Push the changes to the "documents" branch
-          git push origin documents
+          # Force-push the changes to the "documents" branch
+          git push --force origin documents
