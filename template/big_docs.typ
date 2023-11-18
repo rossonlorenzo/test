@@ -1,4 +1,4 @@
-#import "./info.typ": *
+#import "info.typ": *
 
 #let getSurname(a) = {
   return a.split().at(-1)
