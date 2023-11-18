@@ -41,7 +41,7 @@ jobs:
           git push origin pdf-files
 
           # Optionally, if you want to update 'docs' branch as well
-          git checkout -B docs origin/docs
+          git checkout docs
           git checkout pdf-files pdf-files/
           git add .
           git commit -m "Update PDF files [skip ci]"
