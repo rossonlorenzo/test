@@ -17,12 +17,12 @@ jobs:
       - name: Build Typst documents
         run: |
           docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find docs -type f -name "*\.typ" -exec typst compile --root . {} \;
-      
-      - name: Commit and push PDF files to pdf-files branch
+
+      - name: Commit PDF files to pdf-files branch
         run: |
           git checkout -b pdf-files
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add 'docs/**/*.pdf'
           git commit -m "Update PDF files [skip ci]"
-          git push origin pdf-files --force
+          git push origin pdf-files
