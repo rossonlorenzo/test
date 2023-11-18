@@ -1,4 +1,4 @@
-a#import "//template/big_docs.typ": *
+#import "//template/big_docs.typ": *
 
 #show: project.with(
   title: "Analisi dei requisit",
