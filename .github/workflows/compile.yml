@@ -36,10 +36,10 @@ jobs:
           git checkout -b documents
       
           # Check out PDF files from the sources branch
-          git checkout -p sources -- docs/**/*.pdf
+          git checkout sources -- docs/rtb/*.pdf
       
           # Add, commit, and push changes to the documents branch
-          git add docs/**/*.pdf
+          git add docs/
           git commit -m "Update PDF files [skip ci]"
           git push origin documents
 
