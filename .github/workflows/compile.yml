@@ -29,10 +29,15 @@ jobs:
           mkdir -p pdf-files
           cp -r docs/**/*.pdf pdf-files/
 
-      - name: Checkout 'docs' branch
+      - name: Commit pdf files changes
         run: |
-          git fetch origin
-          git checkout origin/docs
+          git add pdf-files/
+          git commit -m "Commit delle modifiche in pdf-files [skip ci]"
+
+      - name: Checkout 'docs' branch and pull changes
+        run: |
+          git checkout docs
+          git pull origin docs
 
       - name: Create pdf-files directory in 'docs' branch if not exists
         run: |
