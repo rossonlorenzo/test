@@ -13,11 +13,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: docs
-
+          
       - name: Debug Directory Contents
         run: |
           ls -R
-
+          
       - name: Build Typst documents
         run: |
           docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find docs -type f -name "*\.typ" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
@@ -26,22 +26,14 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          # Change to the 'docs' branch
-          git checkout docs
-
-          # Add only PDF files and commit
+      
+          # Cambia al branch 'docs'
+          git checkout -B pdf-files
+      
+          # Aggiungi e fai il commit dei file PDF
           git add 'docs/**/*.pdf'
           git commit -m "Update PDF files [skip ci]"
-
-          # Pull changes from the 'pdf-files' branch with rebase
-          git pull --rebase origin pdf-files
-
-          # Create a new branch 'pdf-files' from the current 'docs' commit
-          git checkout -B pdf-files
-
-          # Force push changes to the 'pdf-files' branch
-          git push --force origin pdf-files
-
-          # Switch back to the 'docs' branch
-          git checkout docs
+      
+          # Push del commit nel branch 'docs'
+          git push origin pdf-files
+          
