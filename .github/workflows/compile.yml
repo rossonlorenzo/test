@@ -24,19 +24,17 @@ jobs:
 
       - name: Commit PDF files to pdf-files branch
         run: |
-          git checkout -b pdf-files
+          git checkout docs
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
-          # Add PDF files
-          git add 'docs/**/*.pdf'
-          
-          # Remove all other files
-          git rm -r --cached .
-          
-          # Commit changes
+
+          git add 'pdfs/**/*.pdf'
           git commit -m "Update PDF files [skip ci]"
-          
-          # Push changes to pdf-files branch
+          git push origin docs
+
+          git checkout pdf-files
+          git checkout docs -- pdfs
+          git add .
+          git commit -m "Update PDF files [skip ci]"
           git push origin pdf-files
 
