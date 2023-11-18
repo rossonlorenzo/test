@@ -26,16 +26,15 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b pdf-files
+          git checkout --orphan pdf-files
+          git rm -rf .
+          git commit --allow-empty -m "Initialize pdf-files branch"
           git push origin pdf-files
 
       - name: Copy PDF files to pdf-files branch
         run: |
           mkdir -p pdf-files
-          cp -r docs/**/*.pdf pdf-files/
-
-      - name: Commit and push PDF files to pdf-files branch
-        run: |
+          find docs -type f -name "*.pdf" -exec cp {} pdf-files/
           git add pdf-files/
           git commit -m "Update PDF files [skip ci]"
           git push origin pdf-files
