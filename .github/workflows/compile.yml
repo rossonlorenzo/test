@@ -37,3 +37,28 @@ jobs:
       - name: Push changes to 'sources' branch
         run: |
           git push origin sources
+
+      - name: Checkout 'docs' branch and pull changes
+        run: |
+          git checkout documents
+          git pull origin documents
+
+      - name: Create pdf-files directory in 'docs' branch if not exists
+        run: |
+          if [ ! -d "pdf-files" ]; then
+            mkdir pdf-files
+            git add pdf-files/
+            git commit -m "Create pdf-files directory [skip ci]"
+            git push origin documents
+          fi
+
+      - name: Checkout 'sources' branch and copy PDF files to 'docs'
+        run: |
+          git checkout sources
+          cp -r pdf-files/* docs/
+
+      - name: Commit and push PDF files to 'docs' branch
+        run: |
+          git add docs/
+          git commit -m "Update PDF files in docs [skip ci]"
+          git push origin docs
