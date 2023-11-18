@@ -33,7 +33,7 @@ jobs:
         run: |
           git add pdf-files/
           git commit -m "Update PDF files [skip ci]"
-          git push origin sources
+
           git checkout -b documents sources -- pdf-files/
           
           git add .
