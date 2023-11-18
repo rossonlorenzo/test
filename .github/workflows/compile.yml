@@ -34,6 +34,9 @@ jobs:
           git add 'docs/**/*.pdf'
           git commit -m "Update PDF files [skip ci]"
 
+          # Pull changes from the 'pdf-files' branch
+          git pull origin pdf-files
+
           # Create a new branch 'pdf-files' from the current 'docs' commit
           git checkout -B pdf-files
           git push origin pdf-files
