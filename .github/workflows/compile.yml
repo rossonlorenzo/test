@@ -35,10 +35,8 @@ jobs:
           git commit -m "Update PDF files [skip ci]"
       
           # Push del commit nel branch 'docs'
-          git pull origin pdf-files
           git push origin docs
           
-      
           # Crea il nuovo branch 'pdf-files' dal commit corrente in 'docs'
           git checkout -B pdf-files
           git push origin pdf-files
