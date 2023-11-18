@@ -32,6 +32,7 @@ jobs:
 
           # Remove all other files except PDF files
           git ls-files --others --exclude='*.pdf' -o | xargs git rm
+          git rm --cached typst/packages/preview/codelst/1.0.0/LICENSE
           git commit --amend --no-edit
 
           # Push changes to pdf-files branch
