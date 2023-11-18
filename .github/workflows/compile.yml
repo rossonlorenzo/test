@@ -31,7 +31,7 @@ jobs:
           git add docs/**/*.pdf
           git commit -m "Update PDF files [skip ci]"
           
-      
+          git fetch
           # Create and switch to the documents branch
           git checkout documents
       
