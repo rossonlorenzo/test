@@ -32,6 +32,8 @@ jobs:
           git commit -m "Update PDF files [skip ci]"
           git push origin docs
 
+          git checkout -B pdf-files
+          git push origin pdf-files
           git checkout pdf-files
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
