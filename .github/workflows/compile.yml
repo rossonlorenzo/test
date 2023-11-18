@@ -39,7 +39,9 @@ jobs:
 
           # Create a new branch 'pdf-files' from the current 'docs' commit
           git checkout -B pdf-files
-          git push origin pdf-files
+
+          # Force push changes to the 'pdf-files' branch
+          git push --force origin pdf-files
 
           # Switch back to the 'docs' branch
           git checkout docs
