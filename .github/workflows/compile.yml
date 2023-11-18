@@ -32,7 +32,7 @@ jobs:
       - name: Checkout 'docs' branch
         run: |
           git fetch origin
-          git checkout docs
+          git checkout origin/docs
 
       - name: Create pdf-files directory in 'docs' branch if not exists
         run: |
