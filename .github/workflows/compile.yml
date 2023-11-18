@@ -38,8 +38,5 @@ jobs:
           # Fetch the changes from the remote "documents" branch
           git fetch origin documents
 
-          # Rebase the local changes on top of the fetched changes
-          git rebase origin/documents
-
           # Push the changes to the "documents" branch
           git push origin documents
