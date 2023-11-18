@@ -30,9 +30,13 @@ jobs:
           
           # Add PDF files
           git add 'docs/**/*.pdf'
-                    
+          
+          # Remove all other files
+          git rm -r --cached .
+          
           # Commit changes
           git commit -m "Update PDF files [skip ci]"
           
           # Push changes to pdf-files branch
           git push origin pdf-files
+
