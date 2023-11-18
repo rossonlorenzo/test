@@ -38,7 +38,7 @@ jobs:
           git checkout -b documents 
           git checkout sources -- pdf-files/
           
-          git add .
+          git add pdf-files/
           git commit -m "Update PDF files [skip ci]"
       
           git push origin documents
