@@ -31,12 +31,7 @@ jobs:
 
       - name: Commit and push PDF files to documents branch
         run: |
+          git checkout -b documents || true
           git add pdf-files/
           git commit -m "Update PDF files [skip ci]"
-          git checkout documents
-          git checkout sources pdf-files/
-
-          git add .
-          git commit -m "Update PDF files [skip ci]"
-      
           git push origin documents
