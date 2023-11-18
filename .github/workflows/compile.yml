@@ -22,43 +22,21 @@ jobs:
         run: |
           docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find docs -type f -name "*\.typ" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
 
-      - name: Copy pdf files to pdf-files directory
-        run: |
-          mkdir -p pdf-files
-          cp -r docs/**/*.pdf pdf-files/
-
-      - name: Commit pdf files changes
+      - name: Copy PDF files to sources branch
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p pdf-files
+          cp -r docs/**/*.pdf pdf-files/
+
+      - name: Commit and push PDF files to documents branch
+        run: |
           git add pdf-files/
-          git commit -m "Commit delle modifiche in pdf-files [skip ci]"
-
-      - name: Push changes to 'sources' branch
-        run: |
-          git push origin sources
-
-      - name: Checkout 'docs' branch and pull changes
-        run: |
+          git commit -m "Update PDF files [skip ci]"
           git checkout documents
-          git pull origin documents
+          git checkout sources pdf-files/
 
-      - name: Create pdf-files directory in 'docs' branch if not exists
-        run: |
-          if [ ! -d "pdf-files" ]; then
-            mkdir pdf-files
-            git add pdf-files/
-            git commit -m "Create pdf-files directory [skip ci]"
-            git push origin documents
-          fi
-
-      - name: Checkout 'sources' branch and copy PDF files to 'docs'
-        run: |
-          git checkout sources
-          cp -r pdf-files/* docs/
-
-      - name: Commit and push PDF files to 'docs' branch
-        run: |
-          git add docs/
-          git commit -m "Update PDF files in docs [skip ci]"
-          git push origin docs
+          git add .
+          git commit -m "Update PDF files [skip ci]"
+      
+          git push origin documents
