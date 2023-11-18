@@ -28,7 +28,6 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add 'docs/**/*.pdf'
-          git rm --cached typst/packages/preview/codelst/1.0.0/LICENSE
           git commit -m "Update PDF files [skip ci]"
 
           # Remove all other files except PDF files
