@@ -33,7 +33,7 @@ jobs:
           
       
           # Create and switch to the documents branch
-          git checkout documents
+          git checkout -b documents
       
           # Check out PDF files from the sources branch
           git checkout sources -- docs/**/*.pdf
