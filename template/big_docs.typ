@@ -24,6 +24,7 @@
   heading_numbers: "1.1)",
   body,
 ) = {
+
   set text(font: "New Computer Modern", lang: "it")
   set heading(numbering: heading_numbers)
   show link: underline
