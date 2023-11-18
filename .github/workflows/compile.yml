@@ -45,8 +45,8 @@ jobs:
       
           git checkout -b documents
       
-          # Debug: Display changes after checkout
-          git status
+          # Debug: Display branches after checkout
+          git branch
       
           git checkout sources -- docs/**/*.pdf
       
@@ -64,6 +64,10 @@ jobs:
           git status
       
           git push origin documents
+      
+          # Debug: Display changes after push to documents
+          git status
+
       
           # Debug: Display changes after push to documents
           git status
