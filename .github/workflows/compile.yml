@@ -29,26 +29,27 @@ jobs:
           mkdir -p pdf-files
           cp -r docs/**/*.pdf pdf-files/
 
-      - name: Commit and push PDF files to sources branch
+      - name: Checkout 'docs' branch
         run: |
-          git add pdf-files/
-          git commit -m "Update PDF files [skip ci]"
-          git push origin sources
-
-      - name: Check repository status before updating 'docs'
-        run: |
-          git status
-          git branch
-          git log --oneline -n 5
-          git remote -v
-          
-      - name: Update 'docs' branch
-        if: github.event_name == 'push' && github.ref == 'refs/heads/sources'
-        run: |
-          git checkout docs
           git fetch origin
-          git reset --hard origin/docs
-          git checkout sources pdf-files/
+          git checkout docs
+
+      - name: Create pdf-files directory in 'docs' branch if not exists
+        run: |
+          if [ ! -d "pdf-files" ]; then
+            mkdir pdf-files
+            git add pdf-files/
+            git commit -m "Create pdf-files directory [skip ci]"
+            git push origin docs
+          fi
+
+      - name: Checkout 'sources' branch and copy PDF files
+        run: |
+          git checkout sources
+          cp -r pdf-files/* .
+
+      - name: Commit and push PDF files to 'sources' branch
+        run: |
           git add .
           git commit -m "Update PDF files [skip ci]"
-          git push origin docs
+          git push origin sources
