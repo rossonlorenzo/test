@@ -34,7 +34,9 @@ jobs:
       - name: Copy PDF files to pdf-files branch
         run: |
           mkdir -p pdf-files
-          rsync -a --include='*.pdf' --exclude='*' docs/ pdf-files/
+          find docs -type f -name "*.pdf" -exec cp {} pdf-files/ \;
           git add pdf-files/
           git commit -m "Update PDF files [skip ci]"
+          git pull origin pdf-files --allow-unrelated-histories
           git push origin pdf-files
+
