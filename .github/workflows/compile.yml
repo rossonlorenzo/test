@@ -1,12 +1,9 @@
 name: Build Typst document
 
 on:
-  pull_request:
-    types:
-      - closed
+  push:
     branches:
-      - main
-  workflow_dispatch:
+      - docs
 
 jobs:
   build_typst:
@@ -16,28 +13,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: docs
-
-      - name: Debug Directory Contents
-        run: |
-          ls -R
-      
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v40
-        with:
-          separator: ","
-          files: |
-            docs/**/*.typ
           
       - name: Build Typst documents
         run: |
           docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find docs -type f -name "*\.typ" -exec typst compile --root . {} \;
       
-      - name: Commit and push PDF files to main
+      - name: Commit and push PDF files to pdf-files branch
         run: |
-          git checkout main
+          git checkout -b pdf-files
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add 'docs/**/*.pdf'
           git commit -m "Update PDF files [skip ci]"
-          git push origin
+          git push origin pdf-files
