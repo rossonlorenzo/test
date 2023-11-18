@@ -22,26 +22,32 @@ jobs:
         run: |
           docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find docs -type f -name "*\.typ" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
 
-      - name: Create pdf-files branch and switch to it
+      - name: Copy pdf files
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout sources
-          git push origin sources
-
-      - name: Copy PDF files to pdf-files branch
-        run: |
           mkdir -p pdf-files
           cp -r docs/**/*.pdf pdf-files/
 
-      - name: Commit and push PDF files to pdf-files branch
+      - name: Commit and push PDF files to sources branch
         run: |
           git add pdf-files/
           git commit -m "Update PDF files [skip ci]"
           git push origin sources
 
-          # Optionally, if you want to update 'docs' branch as well
+      - name: Check repository status before updating 'docs'
+        run: |
+          git status
+          git branch
+          git log --oneline -n 5
+          git remote -v
+          
+      - name: Update 'docs' branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/sources'
+        run: |
           git checkout docs
+          git fetch origin
+          git reset --hard origin/docs
           git checkout sources pdf-files/
           git add .
           git commit -m "Update PDF files [skip ci]"
