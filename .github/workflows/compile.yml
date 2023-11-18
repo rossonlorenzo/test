@@ -36,7 +36,7 @@ jobs:
           git checkout -b documents
       
           # Check out PDF files from the sources branch
-          git checkout sources -- docs/**/*.pdf
+          git checkout -p sources -- docs/**/*.pdf
       
           # Add, commit, and push changes to the documents branch
           git add docs/**/*.pdf
