@@ -26,63 +26,13 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            
       
-          # Check the status before committing
-          git status
       
           git add docs/**/*.pdf
           git commit -m "Update PDF files [skip ci]"
-      
-          # Debug: Display changes after commit
-          git status
-      
           git push origin sources
       
-          # Ensure the commit is pushed before proceeding
-          git fetch origin sources
-          git branch -r
-          git log -n 1 origin/sources
-      
           git checkout -b documents
-      
-          # Debug: Display branches after checkout
-          git branch
-      
-          git checkout sources -- docs/**/*.pdf
-      
-          # Debug: Display changes after checkout from sources
-          git status
-      
-          git add docs/**/*.pdf
-      
-          # Debug: Display changes after add
-          git status
-      
-          git commit -m "Update PDF files [skip ci]"
-      
-          # Debug: Display changes after the second commit
-          git status
-      
           git push origin documents
-      
-          # Debug: Display changes after push to documents
-          git status
-
-      
-          # Debug: Display changes after push to documents
-          git status
-
-      
-          # Debug: Display changes after add
-          git status
-      
-          git commit -m "Update PDF files [skip ci]"
-      
-          # Debug: Display changes after the second commit
-          git status
-      
-          git push origin documents
-      
-          # Debug: Display changes after push to documents
-          git status
 
