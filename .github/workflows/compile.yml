@@ -18,14 +18,9 @@ jobs:
         run: |
           ls -R
           
-      - name: compile  
-        uses: yusancky/setup-typst@v2
-        id: setup-typst
-        with:
-          version: 'v0.5.0'
-      - run: |
-          cd docs
-          typst compile **/*.typ
+      - name: Build Typst documents
+        run: |
+          docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find docs -type f -name "*\.typ" -exec typst compile --root . {} \;
           
       - name: Commit PDF files to pdf-files branch
         run: |
