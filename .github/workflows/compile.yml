@@ -30,7 +30,7 @@ jobs:
           # Add and commit PDF files to the sources branch
           git add docs/**/*.pdf
           git commit -m "Update PDF files [skip ci]"
-          
+          git push origin sources
           git fetch
           # Create and switch to the documents branch
           git checkout documents
