@@ -27,14 +27,15 @@ jobs:
           git checkout -b pdf-files
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Add PDF files
           git add 'docs/**/*.pdf'
-          git commit -m "Update PDF files [skip ci]"
-      
+          
           # Remove all other files except PDF files
-          git ls-files --others --exclude='*.pdf' -o | xargs git rm
-      
-          # Commit the removal of other files
-          git commit -m "Remove unnecessary files [skip ci]"
-      
+          git ls-files --others --exclude='*.pdf' -o | xargs git rm -r
+          
+          # Commit changes
+          git commit -m "Update PDF files [skip ci]"
+          
           # Push changes to pdf-files branch
           git push origin pdf-files
