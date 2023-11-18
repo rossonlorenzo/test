@@ -27,13 +27,10 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
       
-          # Cambia al branch 'docs'
           git checkout -B pdf-files
       
-          # Aggiungi e fai il commit dei file PDF
           git add 'docs/**/*.pdf'
           git commit -m "Update PDF files [skip ci]"
-      
-          # Push del commit nel branch 'docs'
+
           git push origin pdf-files
           
