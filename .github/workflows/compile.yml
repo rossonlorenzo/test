@@ -18,7 +18,9 @@ jobs:
         id: setup-typst
         with:
           version: 'v0.5.0'
-      - run: typst compile docs/**/*.typ
+      - run: |
+          cd docs
+          typst compile **/*.typ
           
       - name: Commit PDF files to pdf-files branch
         run: |
