@@ -3,7 +3,7 @@ name: Build Typst document
 on:
   push:
     branches:
-      - pdf-files
+      - sources
 
 jobs:
   build_typst:
@@ -12,7 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          ref: pdf-files
+          ref: sources
 
       - name: Debug Directory Contents
         run: |
@@ -26,8 +26,8 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout pdf-files
-          git push origin pdf-files
+          git checkout sources
+          git push origin sources
 
       - name: Copy PDF files to pdf-files branch
         run: |
@@ -38,11 +38,11 @@ jobs:
         run: |
           git add pdf-files/
           git commit -m "Update PDF files [skip ci]"
-          git push origin pdf-files
+          git push origin sources
 
           # Optionally, if you want to update 'docs' branch as well
           git checkout docs
-          git checkout pdf-files pdf-files/
+          git checkout sources pdf-files/
           git add .
           git commit -m "Update PDF files [skip ci]"
           git push origin docs
