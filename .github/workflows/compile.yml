@@ -26,7 +26,7 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout pdf-files
+          git checkout -b pdf-files
           git push origin pdf-files
 
       - name: Copy PDF files to pdf-files branch
@@ -34,14 +34,15 @@ jobs:
           mkdir -p pdf-files
           cp -r docs/**/*.pdf pdf-files/
 
-      - name: Commit and push PDF files to docs branch
+      - name: Commit and push PDF files to pdf-files branch
         run: |
           git add pdf-files/
           git commit -m "Update PDF files [skip ci]"
-          git checkout docs
-          git checkout pdf-files pdf-files/
+          git push origin pdf-files
 
+          # Optionally, if you want to update 'docs' branch as well
+          git checkout -B docs origin/docs
+          git checkout pdf-files pdf-files/
           git add .
           git commit -m "Update PDF files [skip ci]"
-      
           git push origin docs
