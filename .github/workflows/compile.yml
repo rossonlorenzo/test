@@ -24,21 +24,34 @@ jobs:
 
       - name: Commit PDF files to pdf-files branch
         run: |
-          git checkout docs
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
+      
+          # Cambia al branch 'docs'
+          git checkout docs
+      
+          # Aggiungi e fai il commit dei file PDF
           git add 'docs/**/*.pdf'
           git commit -m "Update PDF files [skip ci]"
+      
+          # Push del commit nel branch 'docs'
           git push origin docs
-
+      
+          # Crea il nuovo branch 'pdf-files' dal commit corrente in 'docs'
           git checkout -B pdf-files
           git push origin pdf-files
-          git checkout pdf-files
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout docs -- docs/**/*.pdf
+      
+          # Torna al branch 'docs'
+          git checkout docs
+      
+          # Ripristina la cartella 'docs/**/*.pdf' nel branch 'pdf-files'
+          git checkout pdf-files -- docs/**/*.pdf
+      
+          # Aggiungi e fai il commit dei cambiamenti nel branch 'pdf-files'
           git add .
           git commit -m "Update PDF files [skip ci]"
+      
+          # Push del commit nel branch 'pdf-files'
           git push origin pdf-files
+
 
