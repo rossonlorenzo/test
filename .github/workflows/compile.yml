@@ -28,6 +28,7 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/**/*.pdf
           git commit -m "Update PDF files [skip ci]"
+          git push origin sources
       
           git checkout -b documents
           git checkout sources -- docs/**/*.pdf
