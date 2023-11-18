@@ -29,7 +29,6 @@ jobs:
 
       - name: Commit and push PDF files to documents branch
         run: |
-          git status
           git add docs/**/*.pdf
           git commit -m "Update PDF files [skip ci]"
           
