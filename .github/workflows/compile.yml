@@ -31,13 +31,14 @@ jobs:
 
       - name: Commit and push PDF files to documents branch
         run: |
+          git status
           git add pdf-files/
           git commit -m "Update PDF files [skip ci]"
           git push origin sources
           
           git checkout -b documents 
           git checkout sources -- pdf-files/
-          
+          git status
           git add pdf-files/
           git commit -m "Update PDF files [skip ci]"
       
