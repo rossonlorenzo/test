@@ -1,7 +1,7 @@
 #import "//template/verbals.typ": *
 
 #show: project.with(
-  title: "Verbale 2",
+  title: "Verbale 1",
   managers: p.rosson,
   recipients: (
     p.vardanega,
