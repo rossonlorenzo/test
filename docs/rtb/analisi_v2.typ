@@ -15,4 +15,4 @@
 = Introduzione
 
 == Scopo del documento
-Ciao a tutti belli e brutti! yeee PORCA TROIA SEEEH
+PIPPO
