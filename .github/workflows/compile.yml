@@ -42,9 +42,6 @@ jobs:
             git push origin documents
           fi
 
-          git fetch
-          # Create and switch to the documents branch
-          git checkout documents
           # Check out PDF files from the sources branch
           git checkout sources -- docs/**/*.pdf
       
