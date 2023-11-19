@@ -31,10 +31,10 @@ jobs:
           git add docs/**/*.pdf
           git commit -m "Update PDF files [skip ci]"
           
-          git fetch
+          
           # Create and switch to the documents branch
           git checkout documents
-          
+          git fetch
           if git ls-tree --name-only documents | grep -q '^docs/'; then
             # Delete the entire docs directory in the documents branch
             git rm -r docs
