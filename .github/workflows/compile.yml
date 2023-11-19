@@ -37,9 +37,10 @@ jobs:
           
 
           git rm -r docs
+          git add .
           git commit -m "Delete existing documents [skip ci]"
           git push origin documents
-          
+          git checkout documents
 
           # Check out PDF files from the sources branch
           git checkout sources -- docs/**/*.pdf
