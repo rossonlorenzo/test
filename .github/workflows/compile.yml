@@ -29,6 +29,7 @@ jobs:
       
           # Add and commit PDF files to the sources branch
           git add docs/rtb/*.pdf
+          git add docs/rtb/**/*.pdf
           git commit -m "Update PDF files [skip ci]"
           git status
           git fetch
@@ -42,6 +43,7 @@ jobs:
 
           # Check out PDF files from the sources branch
           git checkout sources -- docs/rtb/*.pdf
+          git checkout sources -- docs/rtb/**/*.pdf
       
           # Add, commit, and push changes to the documents branch
           git add .
