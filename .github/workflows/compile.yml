@@ -36,7 +36,7 @@ jobs:
           # Create and switch to the documents branch
           git checkout documents
           
-          git rm -r docs
+          git rm -r docs/rtb
           git commit -m "Delete existing documents [skip ci]"
           git push origin documents
 
