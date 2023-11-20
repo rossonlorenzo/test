@@ -20,7 +20,7 @@ jobs:
 
       - name: Build Typst documents
         run: |
-          docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find docs -type f -name "*\.typ" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
+          docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find docs/rtb -type f -name "*\.typ" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
 
       - name: Commit and push PDF files to documents branch
         run: |
@@ -28,7 +28,7 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
       
           # Add and commit PDF files to the sources branch
-          git add docs/**/*.pdf
+          git add docs/rtb/**/*.pdf
           git commit -m "Update PDF files [skip ci]"
           git status
           git fetch
@@ -41,7 +41,7 @@ jobs:
           git push origin documents
 
           # Check out PDF files from the sources branch
-          git checkout sources -- docs/**/*.pdf
+          git checkout sources -- docs/rtb/**/*.pdf
       
           # Add, commit, and push changes to the documents branch
           git add .
