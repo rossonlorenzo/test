@@ -51,14 +51,16 @@ jobs:
           git fetch
           # this part doesn't seems to work
           git checkout documents
-          
+          git status
           # Remove only the modified PDF files from the documents branch
           for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
             if [[ $file == *".pdf" ]]; then
               git rm "$file"
             fi
           done
+          git status
           git add .
+          git status
           git commit -m "Delete existing documents [skip ci]"
           git push origin documents
 
@@ -67,5 +69,6 @@ jobs:
 
           # Add, commit, and push changes to the documents branch
           git add .
+          git status
           git commit -m "Update PDF files [skip ci]"
           git push origin documents
