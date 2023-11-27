@@ -16,4 +16,4 @@
 = Introduzione
 uuuuuuuuu
 == Scopo del documento
-SEGA ATOMICA
+SEGA ATOMICA NUCLEARE
