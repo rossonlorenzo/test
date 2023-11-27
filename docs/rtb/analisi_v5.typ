@@ -17,4 +17,3 @@
 
 == Scopo del documento
 PIPPO ciao bello
-asasdasdasadsasdsddadadsdaddsDdDD
