@@ -8,9 +8,10 @@ on:
 jobs:
   build_typst:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
           ref: sources
 
@@ -20,44 +21,35 @@ jobs:
 
       - name: Build Typst documents
         run: |
-          # Get the list of modified files
-          PREVIOUS_COMMIT=$(git log -n 1 --pretty=format:"%H" ${{ github.sha }}^)
-          MODIFIED_FILES=$(git diff --name-only $PREVIOUS_COMMIT ${{ github.sha }})
-      
+          # Install required tools
+          apt-get update && apt-get install -y git jq
+
+          # Get the list of modified files using action-automatic-releases
+          MODIFIED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+
           # Iterate through modified files and build Typst documents
           for file in $MODIFIED_FILES; do
             if [[ $file == *".typ"* ]]; then
               docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find "$(dirname $file)" -type f -name "$(basename $file)" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
             fi
           done
+
       - name: Commit and push PDF files to documents branch
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        
-          # Add and commit PDF files to the sources branch
-          git add .
-          git commit -m "Update PDF files [skip ci]"
-          git status
-      
-          # Create and switch to the documents branch
+          
           git checkout -b documents
-      
-          MODIFIED_PDF_FILES=$(git diff --name-only --diff-filter=AM sources...HEAD docs/rtb/*.pdf)
-      
-          # Check out PDF files from the sources branch
-          git checkout sources -- docs/rtb/*.pdf
-          git checkout sources -- docs/rtb/**/*.pdf
-      
+          
           # Remove only the modified PDF files from the documents branch
-          git rm $MODIFIED_PDF_FILES
+          git rm $(echo "$MODIFIED_FILES" | grep 'docs/rtb/*.pdf')
           git commit -m "Delete existing documents [skip ci]"
           git push origin documents
-      
+
+          # Check out PDF files from the sources branch
+          git checkout sources -- $(echo "$MODIFIED_FILES" | grep 'docs/rtb/*.pdf')
+
           # Add, commit, and push changes to the documents branch
           git add .
           git commit -m "Update PDF files [skip ci]"
           git push origin documents
-
-
-
