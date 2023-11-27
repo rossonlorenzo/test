@@ -15,4 +15,4 @@
 = Introduzione
 Pippo
 == Scopo del documento
-Ciao a tutti, sono io: MARIO! yyeeee
+Ciao a tutti, sono io: MARIO! yyeeeekonoi
