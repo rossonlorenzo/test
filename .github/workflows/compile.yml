@@ -41,20 +41,14 @@ jobs:
             docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find "$(dirname $file)" -type f -name "$(basename $file)" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
           done
 
-      - name: Debug List of Files Before Second Commit
-        run: |
-          git ls-files
-
       - name: Commit and push PDF files to documents branch
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
+          
           git add .
           git commit -m "Update PDF files [skip ci]"
-
-          # Debug: List files after the second commit
-          git ls-files
+          git fetch
 
           git checkout documents
           
@@ -68,7 +62,7 @@ jobs:
           git push origin documents
 
           # Check out PDF files from the sources branch
-          git checkout sources -- ${{ steps.changed-typst-files.outputs.all_changed_files }}
+          git checkout sources -- docs/**/*.pdf
 
           # Add, commit, and push changes to the documents branch
           git add .
