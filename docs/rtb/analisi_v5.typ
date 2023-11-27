@@ -16,4 +16,4 @@
 = Introduzione
 uuuuuuuuu
 == Scopo del documento
-SEGA ATOMICA NUCLEARE PIPPOS YOOO
+SEGA ATOMICA NUCLEARE PIPPOS YOOO 2002
