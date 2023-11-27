@@ -55,6 +55,7 @@ jobs:
           # Remove only the modified PDF files from the documents branch
           for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
             if [[ $file == *".pdf" ]]; then
+              echo("$file")
               git rm "$file"
             fi
           done
