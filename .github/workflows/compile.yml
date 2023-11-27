@@ -32,30 +32,30 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      
+        
           # Add and commit PDF files to the sources branch
           git add .
           git commit -m "Update PDF files [skip ci]"
           git status
-          git fetch
-          git status
+      
           # Create and switch to the documents branch
-          git checkout documents
-          
+          git checkout -b documents
+      
           MODIFIED_PDF_FILES=$(git diff --name-only --diff-filter=AM sources...HEAD docs/rtb/*.pdf)
-
-          # Remove only the modified PDF files from the approval branch
-          git rm $MODIFIED_PDF_FILES
-          git commit -m "Delete existing documents [skip ci]"
-          git push origin documents
-
+      
           # Check out PDF files from the sources branch
           git checkout sources -- docs/rtb/*.pdf
           git checkout sources -- docs/rtb/**/*.pdf
+      
+          # Remove only the modified PDF files from the documents branch
+          git rm $MODIFIED_PDF_FILES
+          git commit -m "Delete existing documents [skip ci]"
+          git push origin documents
       
           # Add, commit, and push changes to the documents branch
           git add .
           git commit -m "Update PDF files [skip ci]"
           git push origin documents
+
 
 
