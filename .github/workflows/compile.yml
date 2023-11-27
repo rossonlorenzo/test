@@ -1,45 +1,6 @@
-name: Build Typst document
-
-on:
-  push:
-    branches:
-      - sources
-
-jobs:
-  build_typst:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: sources
-          fetch-depth: 0
-
-      - name: Debug Directory Contents
+      - name: Debug List of Files Before Second Commit
         run: |
-          ls -R
-
-      - name: Get all changed markdown files
-        id: changed-typst-files
-        uses: tj-actions/changed-files@v40
-        with:
-          files: |
-             **.typ
-        # Avoid using single or double quotes for multiline patterns
-
-      - name: List all changed files markdown files
-        run: |
-          for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
-      
-      - name: Build Typst documents
-        if: steps.changed-typst-files.outputs.all_changed_files != ''
-        run: |
-          for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
-            docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find "$(dirname $file)" -type f -name "$(basename $file)" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
-          done
+          git ls-files
 
       - name: Commit and push PDF files to documents branch
         run: |
@@ -48,6 +9,9 @@ jobs:
 
           git add .
           git commit -m "Update PDF files [skip ci]"
+
+          # Debug: List files after the second commit
+          git ls-files
 
           git checkout documents
           
