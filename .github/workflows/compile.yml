@@ -64,9 +64,6 @@ jobs:
             
             git rm -- **/"$pdf_file"
             
-            
-            
-          fi
           done
           git status
           git add .
