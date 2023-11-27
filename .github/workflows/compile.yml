@@ -22,13 +22,15 @@ jobs:
       - name: Get modified files
         id: get_modified_files
         run: |
-          MODIFIED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.typ$')
+          MODIFIED_FILES=$(git diff --name-only HEAD^)
           echo "::set-output name=modified_files::$MODIFIED_FILES"
       
       - name: Build Typst documents
         run: |
           for file in ${{ steps.get_modified_files.outputs.modified_files }}; do
-            docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find "$(dirname $file)" -type f -name "$(basename $file)" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
+            if [[ $file == *".typ"* ]]; then
+              docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find "$(dirname $file)" -type f -name "$(basename $file)" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
+            fi
           done
 
       - name: Commit and push PDF files to documents branch
