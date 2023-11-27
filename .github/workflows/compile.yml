@@ -55,7 +55,7 @@ jobs:
 
 
           # Check out PDF files from the sources branch
-          git checkout sources -- docs/**/*.pdf
+          git checkout sources -- docs/rtb/*.pdf
 
           # Add, commit, and push changes to the documents branch
           git add .
