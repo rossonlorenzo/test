@@ -54,18 +54,18 @@ jobs:
           git status
           # Remove only the modified PDF files from the documents branch
           for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
-            if [[ $file == *".typ" ]]; then
+            
             # Extract the base name without the extension
             base_name=$(basename "$file" .typ)
             # Concatenate "pdf" to the base name
             pdf_file="$base_name.pdf"
             
             # Check if the PDF file exists before attempting to remove it
-            if [[ -e $pdf_file ]]; then
-              git rm "$pdf_file"
-            else
-              echo "PDF File does not exist: $pdf_file"
-            fi
+            
+            git rm -- **/"$pdf_file"
+            
+            
+            
           fi
           done
           git status
