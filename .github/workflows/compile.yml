@@ -29,7 +29,7 @@ jobs:
         run: |
           MODIFIED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.typ$')
           echo "::set-output name=modified_files::$MODIFIED_FILES"
-
+      
       - name: Build Typst documents
         run: |
           for file in ${{ steps.get_modified_files.outputs.modified_files }}; do
@@ -41,7 +41,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
-          git checkout -b documents
+          git checkout -b docs
           
           # Remove only the modified PDF files from the documents branch
           git rm $(echo "$MODIFIED_FILES" | grep 'docs/rtb/*.pdf')
