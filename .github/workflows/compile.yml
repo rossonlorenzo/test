@@ -51,7 +51,8 @@ jobs:
           git status
           git fetch
           git status
-          git checkout -b documents
+          
+          git checkout documents
           
           # Remove only the modified PDF files from the documents branch
           for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
