@@ -48,23 +48,4 @@ jobs:
           
           git add .
           git commit -m "Update PDF files [skip ci]"
-          git fetch
-          
-          git checkout documents
-          
-          # Remove only the modified PDF files from the documents branch
-          for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
-            if [[ $file == *".pdf" ]]; then
-              git rm "$file"
-            fi
-          done
-          git commit -m "Delete existing documents [skip ci]"
-          git push origin documents
-
-          # Check out PDF files from the sources branch
-          git checkout sources -- docs/rtb/*.pdf
-
-          # Add, commit, and push changes to the documents branch
-          git add .
-          git commit -m "Update PDF files [skip ci]"
-          git push origin documents
+          git push
