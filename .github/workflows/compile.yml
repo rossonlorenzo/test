@@ -58,6 +58,7 @@ jobs:
               git rm "$file"
             fi
           done
+          git add .
           git commit -m "Delete existing documents [skip ci]"
           git push origin documents
 
