@@ -16,4 +16,4 @@
 = Introduzione
 uuuuuuuuu
 == Scopo del documento
-YEEEEETTT BOYYY STU
+SEGA
