@@ -11,26 +11,34 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: sources
+          fetch-depth: 0
 
       - name: Debug Directory Contents
         run: |
           ls -R
 
-      - name: Get modified files
-        id: get_modified_files
+      - name: Get all changed markdown files
+        id: changed-typst-files
+        uses: tj-actions/changed-files@v40
+        with:
+          files: |
+             **.typ
+        # Avoid using single or double quotes for multiline patterns
+
+      - name: List all changed files markdown files
         run: |
-          MODIFIED_FILES=$(git diff --name-only HEAD^)
-          echo "::set-output name=modified_files::$MODIFIED_FILES"
+          for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
       
       - name: Build Typst documents
+        if: steps.changed-typst-files.outputs.all_changed_files != ''
         run: |
-          for file in ${{ steps.get_modified_files.outputs.modified_files }}; do
-            if [[ $file == *".typ"* ]]; then
-              docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find "$(dirname $file)" -type f -name "$(basename $file)" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
-            fi
+          for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
+            docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find "$(dirname $file)" -type f -name "$(basename $file)" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
           done
 
       - name: Commit and push PDF files to documents branch
@@ -41,14 +49,19 @@ jobs:
           git checkout -b documents
           
           # Remove only the modified PDF files from the documents branch
-          git rm $(echo "$MODIFIED_FILES" | grep 'docs/rtb/*.pdf')
+          for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
+            if [[ $file == *".pdf" ]]; then
+              git rm "$file"
+            fi
+          done
           git commit -m "Delete existing documents [skip ci]"
           git push origin documents
 
           # Check out PDF files from the sources branch
-          git checkout sources -- $(echo "$MODIFIED_FILES" | grep 'docs/rtb/*.pdf')
+          git checkout sources -- ${{ steps.changed-typst-files.outputs.all_changed_files }}
 
           # Add, commit, and push changes to the documents branch
           git add .
           git commit -m "Update PDF files [skip ci]"
           git push origin documents
+
