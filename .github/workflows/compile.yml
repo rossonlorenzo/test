@@ -21,18 +21,19 @@ jobs:
 
       - name: Build Typst documents
         run: |
-          # Install required tools
-          apt-get update && apt-get install -y git jq
-
+          # Install required tools with elevated privileges
+          sudo apt-get update --quiet && sudo apt-get install -y --quiet git jq
+      
           # Get the list of modified files using action-automatic-releases
           MODIFIED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-
+      
           # Iterate through modified files and build Typst documents
           for file in $MODIFIED_FILES; do
             if [[ $file == *".typ"* ]]; then
               docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find "$(dirname $file)" -type f -name "$(basename $file)" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
             fi
           done
+
 
       - name: Commit and push PDF files to documents branch
         run: |
