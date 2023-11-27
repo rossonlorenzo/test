@@ -21,8 +21,8 @@ jobs:
       - name: Build Typst documents
         run: |
           # Get the list of modified files
-          PREVIOUS_COMMIT=$(git rev-parse HEAD^1)
-          MODIFIED_FILES=$(git diff --name-only $PREVIOUS_COMMIT HEAD)
+          PREVIOUS_COMMIT=$(git log -n 1 --pretty=format:"%H" ${{ github.sha }}^)
+          MODIFIED_FILES=$(git diff --name-only $PREVIOUS_COMMIT ${{ github.sha }})
       
           # Iterate through modified files and build Typst documents
           for file in $MODIFIED_FILES; do
