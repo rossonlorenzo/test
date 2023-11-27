@@ -48,10 +48,7 @@ jobs:
 
           git add .
           git commit -m "Update PDF files [skip ci]"
-          git status
-          git fetch
-          git status
-          
+
           git checkout documents
           
           # Remove only the modified PDF files from the documents branch
@@ -70,4 +67,3 @@ jobs:
           git add .
           git commit -m "Update PDF files [skip ci]"
           git push origin documents
-
