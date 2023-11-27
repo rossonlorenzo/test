@@ -20,16 +20,21 @@ jobs:
 
       - name: Build Typst documents
         run: |
-          docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find docs -type f -name "*\.typ" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
-
+          # Get the list of modified files
+          MODIFIED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          # Iterate through modified files and build Typst documents
+          for file in $MODIFIED_FILES; do
+            if [[ $file == *".typ"* ]]; then
+              docker run -e "XDG_CACHE_HOME=/root" --user $(id -u):$(id -g) -v ${{ github.workspace }}:/root --rm ghcr.io/typst/typst:latest find "$(dirname $file)" -type f -name "$(basename $file)" -exec sh -c 'typst compile --root . "$1" && rm -rf typst/packages/preview/' _ {} \;
+            fi
+          done
       - name: Commit and push PDF files to documents branch
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
       
           # Add and commit PDF files to the sources branch
-          git add docs/rtb/*.pdf
-          git add docs/rtb/**/*.pdf
+          git add .
           git commit -m "Update PDF files [skip ci]"
           git status
           git fetch
@@ -37,7 +42,10 @@ jobs:
           # Create and switch to the documents branch
           git checkout documents
           
-          git rm -r docs/rtb
+          MODIFIED_PDF_FILES=$(git diff --name-only --diff-filter=AM sources...HEAD docs/rtb/*.pdf)
+
+          # Remove only the modified PDF files from the approval branch
+          git rm $MODIFIED_PDF_FILES
           git commit -m "Delete existing documents [skip ci]"
           git push origin documents
 
