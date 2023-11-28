@@ -65,9 +65,9 @@ jobs:
             base_name=$(basename "$file" .typ)
             # Concatenate "pdf" to the base name and clear the version
             pdf_file=$(echo "$base_name" | awk -F '_v' '{print $1}')
-            if [ -n "$(find . -name "**/$pdf_file*.pdf" -print -quit)" ]; then
-                git rm -- **/"$pdf_file"*.pdf
-            fi
+
+            git rm -- **/"$pdf_file"*.pdf
+
           done
           git status
           git add .
