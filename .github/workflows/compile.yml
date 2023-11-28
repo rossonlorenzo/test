@@ -26,12 +26,12 @@ jobs:
         with:
           files: |
              **.typ
-        # Avoid using single or double quotes for multiline patterns
+
       - name: End action if no changes
         if: steps.changed-typst-files.outputs.all_changed_files == ''
         run: | 
           echo "no changed files found, ending the job."
-          exit 0 
+          return 0 
 
       - name: List all changed files markdown files
         run: |
@@ -55,7 +55,6 @@ jobs:
           git commit -m "Update PDF files [skip ci]"
           git fetch
 
-          
           git checkout documents
           git status
           # Remove only the modified PDF files from the documents branch
@@ -63,7 +62,7 @@ jobs:
             
             # Extract the base name without the extension
             base_name=$(basename "$file" .typ)
-            # Concatenate "pdf" to the base name
+            # Concatenate "pdf" to the base name and clear the version
             pdf_file=$(echo "$base_name" | awk -F '_v' '{print $1}')
             git rm -- **/"$pdf_file"*.pdf
             
