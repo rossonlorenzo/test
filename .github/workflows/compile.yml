@@ -66,8 +66,9 @@ jobs:
             # Concatenate "pdf" to the base name and clear the version
             pdf_file=$(echo "$base_name" | awk -F '_v' '{print $1}')
 
-            git rm -- **/"$pdf_file"*.pdf
-
+            if (( $(git ls-files -- "**/$pdf_file*.pdf" | wc -l) > 0 )); then
+              git rm -- **/"$pdf_file"*.pdf
+            fi
           done
           git status
           git add .
