@@ -31,7 +31,7 @@ jobs:
         if: steps.changed-typst-files.outputs.all_changed_files == ''
         run: | 
           echo "no changed files found, ending the job."
-          return 0 
+          exit 0 
 
       - name: List all changed files markdown files
         run: |
