@@ -54,23 +54,23 @@ jobs:
           git add .
           git commit -m "Update PDF files [skip ci]"
           git fetch
-          # this part doesn't seems to work
+
+          
           git checkout documents
           git status
           # Remove only the modified PDF files from the documents branch
-          # for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
+          for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
             
             # Extract the base name without the extension
-            # base_name=$(basename "$file" .typ)
+              base_name=$(basename "$file" .typ)
             # Concatenate "pdf" to the base name
-            # pdf_file="$base_name.pdf"
+              pdf_file="$base_name.pdf"
             
             # Check if the PDF file exists before attempting to remove it
             
-          git rm -- **/*.pdf
-          # "$pdf_file"
+          git rm -- **/"$pdf_file"
             
-          # done
+          done
           git status
           git add .
           git status
