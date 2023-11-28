@@ -29,11 +29,11 @@ jobs:
 
       - name: End action if no changes
         if: steps.changed-typst-files.outputs.all_changed_files == ''
-        run: | 
-          echo "no changed files found, ending the job."
-          exit 0 
+        run: echo "no changed files found, ending the job."
 
-      - name: List all changed files markdown files
+
+      - name: List all changed files typst files
+        if: steps.changed-typst-files.outputs.all_changed_files != ''
         run: |
           for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
             echo "$file was changed"
@@ -47,6 +47,7 @@ jobs:
           done
 
       - name: Commit and push PDF files to documents branch
+        if: steps.changed-typst-files.outputs.all_changed_files != ''
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
