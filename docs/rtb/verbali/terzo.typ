@@ -1,7 +1,7 @@
 #import "//template/verbals.typ": *
 
 #show: project.with(
-  title: "Verbale 1",
+  title: "Verbale 3",
   managers: p.rosson,
   recipients: (
     p.vardanega,
@@ -16,4 +16,4 @@
 = Introduzione
 
 == Sintesi
-PIPPO ciao bello
+PIPPO ciao bello yuuuu
