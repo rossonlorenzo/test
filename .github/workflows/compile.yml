@@ -59,19 +59,19 @@ jobs:
           git checkout documents
           git status
           # Remove only the modified PDF files from the documents branch
-          check = false
+          check=false
           for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
-            
             # Extract the base name without the extension
             base_name=$(basename "$file" .typ)
             # Concatenate "pdf" to the base name and clear the version
             pdf_file=$(echo "$base_name" | awk -F '_v' '{print $1}')
-
+            
             if (( $(git ls-files -- "**/$pdf_file*.pdf" | wc -l) > 0 )); then
               git rm -- **/"$pdf_file"*.pdf
-              check = true
+              check=true
             fi
           done
+          
           if $check; then
             git status
             git add .
