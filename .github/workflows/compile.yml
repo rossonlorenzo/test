@@ -64,11 +64,11 @@ jobs:
             # Extract the base name without the extension
               base_name=$(basename "$file" .typ)
             # Concatenate "pdf" to the base name
-              pdf_file="$base_name.pdf"
+              pdf_file=$(echo "$base_name" | cut -d "_v" -f 1)
             
             # Check if the PDF file exists before attempting to remove it
             
-          git rm -- **/"$pdf_file"
+          git rm -- **/"$pdf_file"*.pdf
             
           done
           git status
