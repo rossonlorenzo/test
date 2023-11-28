@@ -16,4 +16,4 @@
 = Introduzione
 
 == Sintesi
-yop
+mod
