@@ -16,4 +16,4 @@
 = Introduzione
 
 == Sintesi
-mod 2
+mod 3

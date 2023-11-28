@@ -15,6 +15,6 @@
 )
 
 = Introduzione
-mod 2
+mod 3
 == Sintesi
 
