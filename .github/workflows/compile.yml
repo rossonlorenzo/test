@@ -20,13 +20,18 @@ jobs:
         run: |
           ls -R
 
-      - name: Get all changed markdown files
+      - name: Get all changed typst files
         id: changed-typst-files
         uses: tj-actions/changed-files@v40
         with:
           files: |
              **.typ
         # Avoid using single or double quotes for multiline patterns
+      - name: End action if no changes
+        if: steps.changed-typst-files.outputs.all_changed_files == ''
+        run: | 
+          echo "no changed files found, ending the job."
+          exit 0 
 
       - name: List all changed files markdown files
         run: |
@@ -53,16 +58,17 @@ jobs:
           git checkout documents
           git status
           # Remove only the modified PDF files from the documents branch
-          for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
+          # for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
             
             # Extract the base name without the extension
-            base_name=$(basename "$file" .typ)
+            # base_name=$(basename "$file" .typ)
             # Concatenate "pdf" to the base name
-            pdf_file="$base_name.pdf"
+            # pdf_file="$base_name.pdf"
             
             # Check if the PDF file exists before attempting to remove it
             
-            git rm -- **/"$pdf_file"
+          git rm -- **/*.pdf
+          # "$pdf_file"
             
           done
           git status
