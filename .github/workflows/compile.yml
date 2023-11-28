@@ -64,7 +64,7 @@ jobs:
             # Extract the base name without the extension
             base_name=$(basename "$file" .typ)
             # Concatenate "pdf" to the base name
-            pdf_file=$(echo "$base_name" | cut -d "_v" -f 1)
+            pdf_file=$(echo "$base_name" | awk -F '_v' '{print $1}')
             git rm -- **/"$pdf_file"*.pdf
             
           done
