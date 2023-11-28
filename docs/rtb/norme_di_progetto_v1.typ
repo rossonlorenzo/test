@@ -13,6 +13,6 @@
 )
 
 = Introduzione
-mod
+mod 2
 == Scopo del documento
 
