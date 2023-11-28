@@ -19,8 +19,8 @@ jobs:
                   pip install ruff
             - name: Run linter
               run: |
-                  ruff check . --exclude "docs/"
-                  ruff --fix . --exclude "docs/"
+                  ruff check .
+                  ruff --fix .
             - name: Auto commit style fixes
               uses: stefanzweifel/git-auto-commit-action@v5
               with:
