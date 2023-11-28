@@ -1,4 +1,4 @@
-name: ruff
+name: Ruff check e fix
 on:
     push:
         branches:
@@ -8,14 +8,20 @@ jobs:
     lint:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-python@v4
+            - name: Checkout code
+              uses: actions/checkout@v4
+            - name: Set up Python
+              uses: actions/setup-python@v4
               with:
                   python-version: 3.12
-            - run: pip install ruff
-            - run: |
-                  ruff check . --exclude "docs/
-                  ruff --fix . --exclude "docs/
-            - uses: stefanzweifel/git-auto-commit-action@v5
+            - name: Install dependencies
+              run: |
+                  pip install ruff
+            - name: Run linter
+              run: |
+                  ruff check . --exclude "docs/"
+                  ruff --fix . --exclude "docs/"
+            - name: Auto commit style fixes
+              uses: stefanzweifel/git-auto-commit-action@v5
               with:
                   commit_message: "style fixes by ruff"
