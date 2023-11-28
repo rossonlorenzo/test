@@ -62,13 +62,10 @@ jobs:
           for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
             
             # Extract the base name without the extension
-              base_name=$(basename "$file" .typ)
+            base_name=$(basename "$file" .typ)
             # Concatenate "pdf" to the base name
-              pdf_file=$(echo "$base_name" | cut -d "_v" -f 1)
-            
-            # Check if the PDF file exists before attempting to remove it
-            
-          git rm -- **/"$pdf_file"*.pdf
+            pdf_file=$(echo "$base_name" | cut -d "_v" -f 1)
+            git rm -- **/"$pdf_file"*.pdf
             
           done
           git status
