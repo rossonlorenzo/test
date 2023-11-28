@@ -25,7 +25,7 @@ jobs:
         uses: tj-actions/changed-files@v40
         with:
           files: |
-             **.typ
+             docs/**/*.typ
 
       - name: End action if no changes
         if: steps.changed-typst-files.outputs.all_changed_files == ''
