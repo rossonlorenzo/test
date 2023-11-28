@@ -15,6 +15,6 @@
 )
 
 = Introduzione
-mod 6
+mod 7
 == Sintesi
 
