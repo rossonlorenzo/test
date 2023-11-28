@@ -59,6 +59,7 @@ jobs:
           git checkout documents
           git status
           # Remove only the modified PDF files from the documents branch
+          check = false
           for file in ${{ steps.changed-typst-files.outputs.all_changed_files }}; do
             
             # Extract the base name without the extension
@@ -68,13 +69,16 @@ jobs:
 
             if (( $(git ls-files -- "**/$pdf_file*.pdf" | wc -l) > 0 )); then
               git rm -- **/"$pdf_file"*.pdf
+              check = true
             fi
           done
-          git status
-          git add .
-          git status
-          git commit -m "Delete existing documents [skip ci]"
-          git push origin documents
+          if $check; then
+            git status
+            git add .
+            git status
+            git commit -m "Delete existing documents [skip ci]"
+            git push origin documents
+          fi
 
           # Check out PDF files from the sources branch
           git checkout sources -- *.pdf
